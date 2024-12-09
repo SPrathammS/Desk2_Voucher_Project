@@ -10,7 +10,7 @@ def data_cleaning (df):
     df["Payment Method"] = [i.capitalize() for i in df["Payment Method"]]
     df_clean = df.dropna(subset=['Payment Method'])
 
-    df["Payment Method"] = df["Payment Method"].str.lower()
+    # df["Payment Method"] = df["Payment Method"].str.lower()
  
     payment_counts = df_clean['Payment Method'].value_counts()
     print(payment_counts["Voucher"]) 
@@ -19,15 +19,14 @@ def data_cleaning (df):
     print (payment_percentages["Voucher"])
     return(df_clean)
    
-
 # #! try to make a loop as its iteration
 df1 = pd.read_excel("monday_voucher_data.xlsx")
 df2 = pd.read_excel("tuesday_voucher_data.xlsx")
-df3= pd.read_excel("wednesday_voucher_data.xlsx")
-df4= pd.read_excel("thursday_voucher_data.xlsx")
-df5= pd.read_excel("friday_voucher_data.xlsx")
-df6= pd.read_excel("saturday_voucher_data.xlsx")
-df7= pd.read_excel("sunday_voucher_data.xlsx")
+df3 = pd.read_excel("wednesday_voucher_data.xlsx")
+df4 = pd.read_excel("thursday_voucher_data.xlsx")
+df5 = pd.read_excel("friday_voucher_data.xlsx")
+df6 = pd.read_excel("saturday_voucher_data.xlsx")
+df7 = pd.read_excel("sunday_voucher_data.xlsx")
 
 df1 = data_cleaning(df1)
 df2 = data_cleaning(df2)
@@ -38,25 +37,6 @@ df6 = data_cleaning(df6)
 df7 = data_cleaning(df7)
 
 #! sum of item and cost for each payment method
-# Filter for rows where Transaction Type is "Payment"
-# payment_data = df[df["Transaction Type"] == "Payment"]
-# payment_data = df1[df1["Transaction Type"] == "Payment"]
-# payment_data = df2[df2["Transaction Type"] == "Payment"]
-# payment_data = df3[df3["Transaction Type"] == "Payment"]
-# payment_data = df4[df4["Transaction Type"] == "Payment"]
-# payment_data = df5[df5["Transaction Type"] == "Payment"]
-# payment_data = df6[df6["Transaction Type"] == "Payment"]
-
-# # Group by Payment Method and calculate the total cost
-# total_cost_by_payment_method = payment_data.groupby("Payment Method")["Cost"].sum()
-
-# # Display the result
-# print(total_cost_by_payment_method)
-
-
-
-# Assume df1, df2, df3, df4, df5, and df6 are already loaded DataFrames.
-# You can replace this with loading logic for your specific case.
 
 dataframes = [df1, df2, df3, df4, df5, df6, df7]
 
@@ -110,9 +90,8 @@ for i, df in enumerate(dataframes, start=1):
 for df_name, percentage in percentage_results.items():
     print(f"\nPercentage of Total Cost by Payment Method in {df_name}:\n{percentage}")
 # Step 3: Combine total costs across all DataFrames
-combined_total_cost = pd.concat([df[df["Transaction Type"] == "Payment"]
-                                 .groupby("Payment Method")["Cost"].sum()
-                                 for df in dataframes]).groupby("Payment Method").sum()
+combined_total_cost = pd.concat([df[df["Transaction Type"] == "Payment"].groupby("Payment Method")["Cost"].sum()
+for df in dataframes]).groupby("Payment Method").sum()
 
 # Step 4: Calculate combined total cost and percentage
 combined_total_cost_sum = combined_total_cost.sum()

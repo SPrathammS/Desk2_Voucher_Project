@@ -2,15 +2,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 plt.style.use("ggplot")
 
-# Function to clean data: Remove NaN, duplicates, and capitalize "Payment Method"
+#* Function to clean data: Remove NaN, duplicates, and capitalize "Payment Method"
 def clean_data(file_path):
     df = pd.read_excel(file_path)
     df = df.drop_duplicates().dropna(subset=['Payment Method', 'Total Items', 'Cost', 'Transaction Type', 'Basket'])
     df["Payment Method"] = df["Payment Method"].str.capitalize()
     return df
 
-
-# Function to extract payment method, items, and cost data from all files
+#* Function to extract payment method, items, and cost data from all files
 def extract_data(file_paths):
    
     dataframes = []
@@ -22,7 +21,7 @@ def extract_data(file_paths):
     return dataframes
     
     
-# Function to calculate total and percentage of cost by payment method
+#* Function to calculate total and percentage of cost by payment method
 def calculate_totals_and_percentages(dataframes):
 
     total_cost_by_day = []  # For stacked bar chart
@@ -39,15 +38,17 @@ def calculate_totals_and_percentages(dataframes):
     
     # Calculate percentage for each payment method
     combined_percentage = (combined_total_cost / combined_total_cost.sum()) * 100
-    # print(total_cost_by_day)    # stacked bar chart
-    # print(combined_total_cost)   
-    # print(combined_percentage)   # pie chart
-    # print(combined_total_items)  # bar chart
+
+    # print(total_cost_by_day)    #! stacked bar chart
+    print(combined_total_cost)   
+    # print(combined_percentage)   #! pie chart
+    print(combined_total_items)  #! bar chart
     # print(total_items_per_method) # empty
+
     return total_cost_by_day, combined_total_cost, combined_percentage, combined_total_items
 
 
-# Function to plot stacked bar chart and pie chart
+#* Function to plot stacked bar chart and pie chart
 def plot_charts(total_cost_by_day, combined_percentage, combined_total_items):
    
     # Create DataFrame for stacked bar chart
@@ -55,7 +56,7 @@ def plot_charts(total_cost_by_day, combined_percentage, combined_total_items):
     # stacked_df.index = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     # stacked_df.fillna(0, inplace=True)  # Replace NaN with 0 for plotting
 
-    # # Plot stacked bar chart
+    #! Plot stacked bar chart
 
     #? stacked_df.plot(kind='bar', stacked=True, figsize=(10, 6), colormap='Set3', edgecolor='black')
     # plt.title('Total Cost by Payment Method Over the Week')
@@ -79,7 +80,7 @@ def plot_charts(total_cost_by_day, combined_percentage, combined_total_items):
     plt.xticks(rotation=45)
     plt.show()
  
-    # Plot pie chart
+    #! Plot pie chart
 
     #? combined_percentage.plot(kind='pie', autopct='%1.1f%%', figsize=(8, 8), colormap='Set3')
     # plt.title('Percentage of Total Cost by Payment Method')
@@ -93,16 +94,9 @@ def plot_charts(total_cost_by_day, combined_percentage, combined_total_items):
     plt.title("Weekly Income")
     plt.show()
 
-    # bar chart for items sold
+    #! bar chart for items sold
 
-    df = pd.DataFrame({
-    "Payment Method" : [
-    "Cash",
-    "Credit",
-    "Debit",
-    "Mobile Wallet",
-    "Voucher"
-    ], "Items Sold" : combined_total_items,})
+    df = pd.DataFrame({"Payment Method" : ["Cash","Credit","Debit","Mobile Wallet","Voucher"], "Items Sold" : combined_total_items,})
     df = df.sort_values("Items Sold")
     bar_colours = ["red" if x=="Voucher" else "blue" for x in df["Payment Method"]]
     
@@ -113,7 +107,7 @@ def plot_charts(total_cost_by_day, combined_percentage, combined_total_items):
     plt.show()
 
 
-# File paths for the 7 Excel files
+#* File paths for the 7 Excel files
 file_paths = [
     "monday_voucher_data.xlsx",
     "tuesday_voucher_data.xlsx",
@@ -124,11 +118,11 @@ file_paths = [
     "sunday_voucher_data.xlsx"
 ]
 
-# Step 1: Extract data from all Excel files
+#* Step 1: Extract data from all Excel files
 dataframes = extract_data(file_paths)
 
-# Step 2: Calculate totals and percentages
+#* Step 2: Calculate totals and percentages
 total_cost_by_day, combined_total_cost, combined_percentage, combined_total_items = calculate_totals_and_percentages(dataframes)
 
-# Step 3: Plot stacked bar chart and pie chart
+#* Step 3: Plot stacked bar chart and pie chart
 plot_charts(total_cost_by_day, combined_percentage, combined_total_items)
